@@ -182,7 +182,7 @@ fun SignUpScreenScreen(
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(16.dp),
-			value = loginUiState?.passwordSignUp ?: "",
+			value = loginUiState?.password ?: "", // changed from passWordSignUP
 			onValueChange = { loginViewModel?.onPasswordSignupChange(it) },
 			leadingIcon = {
 				Icon(
