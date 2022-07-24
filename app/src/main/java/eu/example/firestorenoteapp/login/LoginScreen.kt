@@ -48,8 +48,9 @@ fun LoginScreen(
 			color = MaterialTheme.colors.primary
 		)
 		if (isError) {
-			Text(text = loginUiState?.loginError ?: "Unknown error", color = Color.Red)
-
+			Text(
+				text = loginUiState?.loginError ?: "Unknown error",
+				color = Color.Red)
 		}
 		// Email Input
 		OutlinedTextField(
@@ -104,7 +105,6 @@ fun LoginScreen(
 		Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
 			Text(text = "Don't have an Account?")
 			Spacer(modifier = Modifier.size(8.dp))
-			// Invoke navigation - Not sure if error ??
 			TextButton(onClick = { onNavigateToSignUpPage.invoke() }) {
 				Text(text = "SignUp")
 			}
@@ -177,13 +177,35 @@ fun SignUpScreenScreen(
 			},
 			isError = isError)
 
+		// TRYING TO INSERT BLOCK HERE -----
+		OutlinedTextField(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(16.dp),
+			value = loginUiState?.passwordSignUp ?: "",
+			onValueChange = { loginViewModel?.onPasswordSignupChange(it) },
+			leadingIcon = {
+				Icon(
+					imageVector = Icons.Default.Lock,
+					contentDescription = null,
+				)
+			},
+			label = {
+				Text(text = "Password")
+			},
+			visualTransformation = PasswordVisualTransformation(),
+			isError = isError
+		)
+
+		// BLOCK END !!!!
+
 		// Password Input
 		OutlinedTextField(
 			modifier = Modifier
 				.padding(16.dp)
 				.fillMaxWidth(),
 			// pass in userName from viewModel, or set it to an empty string if it is null
-			value = loginUiState?.confirmPasswordSignUp ?: "",
+			value = loginUiState?.passwordSignUp ?: "", // RIGHT CALL ?
 			// This part I need a better understanding off -
 			// I set the value to whatever I type in the textInput
 			// I think this is is similar to a callback
@@ -206,7 +228,10 @@ fun SignUpScreenScreen(
 		Spacer(modifier = Modifier.size(16.dp))
 
 		// Sign up user
-		Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+		Row(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalArrangement = Arrangement.Center
+		) {
 			Text(text = "Already have an Account?")
 			Spacer(modifier = Modifier.size(8.dp))
 			// Invoke navigation

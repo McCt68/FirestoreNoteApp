@@ -11,6 +11,7 @@ import eu.example.firestorenoteapp.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
+	// get reference to the repository with methods for Auth
 	private val repository: AuthRepository = AuthRepository()
 ) : ViewModel() {
 
@@ -62,7 +63,6 @@ class LoginViewModel(
 	}
 
 	// Validate if user has entered input
-	// Will it matter if i use a code block or = for the function ??
 	private fun validateLoginForm() =
 		loginUiState.userName.isNotBlank() &&
 				loginUiState.password.isNotBlank()
@@ -79,22 +79,25 @@ class LoginViewModel(
 				throw IllegalArgumentException("email and password can not be empty")
 			}
 			loginUiState = loginUiState.copy(isLoading = true)
-			if (loginUiState.passwordSignUp != loginUiState.confirmPasswordSignUp) {
+			if (loginUiState.passwordSignUp != loginUiState.confirmPasswordSignUp
+			) {
 				throw IllegalArgumentException("the password is incorrect")
 			}
 			loginUiState = loginUiState.copy(signUpError = null) // it was already null or ??
 			repository.createUser(
-				email = loginUiState.userNameSignUp,
-				password = loginUiState.passwordSignUp
-			){isSuccessful ->
-				if (isSuccessful){
+//				email = loginUiState.userNameSignUp,
+//				password = loginUiState.passwordSignUp
+				loginUiState.userNameSignUp,
+				loginUiState.passwordSignUp
+			) { isSuccessful ->
+				if (isSuccessful) {
 					Toast.makeText(
 						context,
 						"Successful login",
 						Toast.LENGTH_SHORT
 					).show()
 					loginUiState = loginUiState.copy(isSuccessLogin = true)
-				}else{
+				} else {
 					Toast.makeText(
 						context,
 						"Failed to login",
@@ -106,7 +109,7 @@ class LoginViewModel(
 		} catch (e: Exception) {
 			loginUiState = loginUiState.copy(signUpError = e.localizedMessage)
 			e.printStackTrace()
-		}finally {
+		} finally {
 			loginUiState = loginUiState.copy(isLoading = false)
 		}
 	}
@@ -122,15 +125,15 @@ class LoginViewModel(
 			repository.loginUser(
 				email = loginUiState.userName,
 				password = loginUiState.password
-			){isSuccessful ->
-				if (isSuccessful){
+			) { isSuccessful ->
+				if (isSuccessful) {
 					Toast.makeText(
 						context,
 						"Successful login",
 						Toast.LENGTH_SHORT
 					).show()
 					loginUiState = loginUiState.copy(isSuccessLogin = true)
-				}else{
+				} else {
 					Toast.makeText(
 						context,
 						"Failed to login",
@@ -142,7 +145,7 @@ class LoginViewModel(
 		} catch (e: Exception) {
 			loginUiState = loginUiState.copy(loginError = e.localizedMessage)
 			e.printStackTrace()
-		}finally {
+		} finally {
 			loginUiState = loginUiState.copy(isLoading = false)
 		}
 	}
@@ -151,7 +154,9 @@ class LoginViewModel(
 }
 
 
+// Data class for the LoginState
 // I think this is the uiState we can pass to the view ??
+// Is this really what we call a model ?
 // I need to understand this better
 data class LoginUiState(
 	val userName: String = "",
