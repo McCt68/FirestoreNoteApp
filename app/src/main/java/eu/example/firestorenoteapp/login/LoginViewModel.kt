@@ -85,8 +85,6 @@ class LoginViewModel(
 			}
 			loginUiState = loginUiState.copy(signUpError = null) // it was already null or ??
 			repository.createUser(
-//				email = loginUiState.userNameSignUp,
-//				password = loginUiState.passwordSignUp
 				loginUiState.userNameSignUp,
 				loginUiState.passwordSignUp
 			) { isSuccessful ->

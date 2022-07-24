@@ -101,7 +101,7 @@ fun LoginScreen(
 		}
 		Spacer(modifier = Modifier.size(16.dp))
 
-		// Sign up user
+		// Navigate to Sign up user
 		Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
 			Text(text = "Don't have an Account?")
 			Spacer(modifier = Modifier.size(8.dp))
@@ -128,7 +128,7 @@ fun LoginScreen(
 }
 
 
-//
+// Sign up screen
 @Composable
 fun SignUpScreenScreen(
 	loginViewModel: LoginViewModel? = null, // pass null so we can use preview ??
@@ -177,12 +177,12 @@ fun SignUpScreenScreen(
 			},
 			isError = isError)
 
-		// TRYING TO INSERT BLOCK HERE -----
+		// TRYING TO INSERT BLOCK HERE ----- for password
 		OutlinedTextField(
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(16.dp),
-			value = loginUiState?.password ?: "", // changed from passWordSignUP
+			value = loginUiState?.passwordSignUp ?: "", // changed from passWordSignUP
 			onValueChange = { loginViewModel?.onPasswordSignupChange(it) },
 			leadingIcon = {
 				Icon(
@@ -199,13 +199,13 @@ fun SignUpScreenScreen(
 
 		// BLOCK END !!!!
 
-		// Password Input
+		// Confirm Password Input
 		OutlinedTextField(
 			modifier = Modifier
 				.padding(16.dp)
 				.fillMaxWidth(),
 			// pass in userName from viewModel, or set it to an empty string if it is null
-			value = loginUiState?.passwordSignUp ?: "", // RIGHT CALL ?
+			value = loginUiState?.confirmPasswordSignUp ?: "", // RIGHT CALL ?
 			// This part I need a better understanding off -
 			// I set the value to whatever I type in the textInput
 			// I think this is is similar to a callback
@@ -250,11 +250,7 @@ fun SignUpScreenScreen(
 				onNavigateToHomePage.invoke()
 			}
 		}
-
 	}
-
-
-
 }
 
 @Preview(showSystemUi = true)
