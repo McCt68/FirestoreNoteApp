@@ -1,8 +1,6 @@
 package eu.example.firestorenoteapp.detail
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +40,8 @@ fun DetailScreen(
 		targetValue = Utils.colors[detailUiState.colorIndex]
 	)
 	val isNoteIdNotBlank = noteId.isNotBlank()
-	val icon = if (isNoteIdNotBlank) Icons.Default.Refresh
+
+	val icon = if (isNoteIdNotBlank) Icons.Default.Refresh // val or var ?
 	else Icons.Default.Check
 	LaunchedEffect(key1 = Unit) {
 		if (isNoteIdNotBlank) {
@@ -58,7 +57,11 @@ fun DetailScreen(
 	Scaffold(
 		scaffoldState = scaffoldState,
 		floatingActionButton = {
-			AnimatedVisibility(visible = isFormsNotBlank) {
+			AnimatedVisibility(
+				visible = isFormsNotBlank,
+				enter = scaleIn(), // Added by me. If I leave these out the FAB don't show
+				exit = scaleOut()
+			) {
 				FloatingActionButton(
 					onClick = {
 						if (isNoteIdNotBlank) {
@@ -80,7 +83,7 @@ fun DetailScreen(
 				.padding(padding)
 		) {
 			// I changed here to use Launched effect so I can use .launch in here
-			LaunchedEffect(key1 = detailUiState.noteAddedStatus){
+			LaunchedEffect(key1 = detailUiState.noteAddedStatus) {
 				if (detailUiState.noteAddedStatus) {
 					scope.launch {
 						scaffoldState.snackbarHostState
@@ -98,9 +101,6 @@ fun DetailScreen(
 					}
 				}
 			}
-
-
-
 
 			LazyRow(
 				modifier = Modifier.fillMaxWidth(),
@@ -156,16 +156,13 @@ fun ColorItem(
 			},
 		border = BorderStroke(2.dp, Color.Black)
 	) {
-
 	}
-
-
 }
 
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewDetailScreen() {
-	FirestoreNoteAppTheme{
+	FirestoreNoteAppTheme {
 		DetailScreen(detailViewModel = null, noteId = "") {
 
 		}
@@ -192,28 +189,6 @@ fun PreviewDetailScreen() {
 //			onNavigate.invoke()
 //		}
 //	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // ------------- My own don't work ------------------

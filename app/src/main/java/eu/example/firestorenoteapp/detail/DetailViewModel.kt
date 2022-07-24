@@ -23,7 +23,7 @@ class DetailViewModel(
 		get() = repository.hasUser()
 
 	private val user: FirebaseUser?
-		get() = repository.user() // Might need function call ()
+		get() = repository.user()
 
 	// Events to update the detailUiState
 	fun onColorChange(colorIndex: Int) {
@@ -54,7 +54,7 @@ class DetailViewModel(
 			repository.addNote(
 				userId = user!!.uid,
 				title = detailUiState.title,
-				description = detailUiState.note,
+				description = detailUiState.note, // DESCRIPTION OR note ??
 				color = detailUiState.colorIndex,
 				timeStamp = Timestamp.now()
 			) {
@@ -64,7 +64,7 @@ class DetailViewModel(
 	}
 
 	// Event to edit a note ??
-	fun setEditFields(note: Notes){
+	fun setEditFields(note: Notes) {
 		detailUiState = detailUiState.copy(
 			colorIndex = note.colorIndex,
 			title = note.title,
@@ -73,47 +73,43 @@ class DetailViewModel(
 	}
 
 	// Event to get a note from firestore, by calling the getNote function in the repository
-	fun getNote(noteId: String){
+	fun getNote(noteId: String) {
 		repository.getNote(
 			noteId = noteId,
 			onError = {}
-		){
+		) {
 			detailUiState = detailUiState.copy(selectedNote = it)
-			detailUiState.selectedNote?.let {
-					whatIsLet ->
-				setEditFields(whatIsLet) }
+			detailUiState.selectedNote?.let { whatIsLet ->
+				setEditFields(whatIsLet)
+			}
 		}
 	}
 
 	fun updateNote(
 		noteId: String
-	){
+	) {
 		repository.updateNote(
 			title = detailUiState.title,
 			note = detailUiState.note,
 			noteId = noteId,
 			color = detailUiState.colorIndex
-		){ updatedNote ->
+		) { updatedNote ->
 			detailUiState = detailUiState.copy(updateNoteStatus = updatedNote)
 		}
 	}
 
 	//
-	fun resetNoteAddedStatus(){
+	fun resetNoteAddedStatus() {
 		detailUiState = detailUiState.copy(
 			noteAddedStatus = false,
-			updateNoteStatus = false)
+			updateNoteStatus = false
+		)
 	}
 
 	// Reset the whole state back to its normal ( Initial value)
-	fun resetState(){
+	fun resetState() {
 		detailUiState = DetailUiState() // Create a new Object, and thereby reset the whole state
 	}
-
-
-
-
-
 }
 
 // Data class for the UI state
